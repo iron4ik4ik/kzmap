@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карта Казахстана</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1em;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+        header p {
+            margin: 0.5em 0 0;
+            font-size: 1em;
+        }
+        #map {
+            height: 70vh;
+            width: 100%;
+            margin: 20px auto;
+            max-width: 1200px;
+        }
+        #info {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: none;
+            text-align: left;
+        }
+        #info h2 {
+            margin: 0 0 10px;
+            color: #2c3e50;
+        }
+        #info p {
+            margin: 5px 0;
+        }
+        @media (max-width: 600px) {
+            #map {
+                height: 50vh;
+            }
+            header h1 {
+                font-size: 1.5em;
+            }
+            #info {
+                margin: 10px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Карта Казахстана</h1>
+        <p>Кликните на город, чтобы увидеть статистику</p>
+    </header>
+    <div id="map"></div>
+    <div id="info"></div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Инициализация карты
+        const map = L.map('map').setView([48.019573, 66.923684], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        // Данные о городах (замените на данные из Excel)
+        const cities = {
+            "Astana": {
+                lat: 51.169392,
+                lng: 71.449074,
+                population: "1,200,000",
+                area: "722 km²"
+            },
+            "Almaty": {
+                lat: 43.222015,
+                lng: 76.851248,
+                population: "1,900,000",
+                area: "682 km²"
+            },
+            "Shymkent": {
+                lat: 42.341685,
+                lng: 69.590101,
+                population: "1,000,000",
+                area: "1170 km²"
+            }
+        };
+
+        // Добавление маркеров
+        for (const city in cities) {
+            const marker = L.marker([cities[city].lat, cities[city].lng]).addTo(map);
+            marker.on('click', () => {
+                const infoDiv = document.getElementById('info');
+                infoDiv.style.display = 'block';
+                infoDiv.innerHTML = `
+                    <h2>${city}</h2>
+                    <p>Население: ${cities[city].population}</p>
+                    <p>Площадь: ${cities[city].area}</p>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
